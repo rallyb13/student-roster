@@ -10,14 +10,52 @@
   </head>
   <body>
     <div class="container" ng-controller="StudentsCtrl">
-      <div class="row">
+      <div class="row" ng-show="students.length">
         <div class="col-md-12">
-          <h2>Student List</h2>
-          <ul>
-            <li ng-repeat="item in students">
-              {{item.name}}
-            </li>
-          </ul>
+          <div class="well">
+            <h4>Search Students</h4>
+            <form class="form-inline" role="form">
+              <div class="form-group">
+                <input ng-model="query" type="text" class="form-control" id="student-name" placeholder="Search">
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-8">
+
+          <div class="well" ng-show="students.length && !filtered.length">
+            <h2 ng-show="students.length && !filtered.length">No Matches</h2>
+          </div>
+
+          <div class="well" ng-show="students.length && filtered.length">
+            <h2 ng-show="students.length && filtered.length">Student List</h2>
+            <ul>
+              <li ng-repeat="item in filtered = (students | filter:query)">
+                <span ng-click="editing = true" ng-hide="editing">
+                {{item.name}} <a ng-click ="deleteStudent(item)">Delete Me!</a>
+                </span>
+                <span class="form-group" ng-show="editing" ng-submit="editing = false">
+                  <form class="form-inline" role="form">
+                    <input type="text" class="form-control input-sm" ng-model="item.name" placeholder="(new) Name" required>
+                    <button type="submit" class="btn btn-sm btn-info">Save Change</button>
+                  </form>
+                </span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="well">
+            <h2>New Student</h2>
+            <form ng-submit="addStudent()" class="form-inline" role="form">
+              <div class="form-group">
+                <input type="text" ng-model="studentName" class="form-control" placeholder="Enter name" required>
+              </div>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+          </div>
         </div>
       </div>
     </div>
